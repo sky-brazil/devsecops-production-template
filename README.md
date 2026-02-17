@@ -1,32 +1,61 @@
-# 05 - Production DevSecOps Template
+# 05 - Production DevSecOps Template (Implemented)
 
-## Positioning
-Reusable secure delivery template with CI/CD, automated checks, and production deployment baseline.
+This project is a reusable DevSecOps baseline for client deliveries.
 
-## Target market
-- Product teams without mature engineering platform
-- Agencies and consultancies delivering secure software
+## Delivered capabilities
 
-## MVP scope
-- Standardized project scaffold
-- CI pipeline for tests and static analysis
-- Container image build and vulnerability scan
-- IaC baseline for deployment
-- Observability and incident-ready logs
+- secure reference API with:
+  - request ID propagation
+  - security headers middleware
+  - basic rate limiting
+- test suite to validate security behavior
+- hardened Docker image (non-root runtime user)
+- CI workflow with tests + Bandit static security analysis
+- Trivy workflow for filesystem vulnerability scanning
+- Terraform starter for production logging/artifact controls
 
-## Suggested stack
-- CI/CD: GitHub Actions
-- Security: Trivy, Semgrep, dependency scanning
-- Infra: Terraform
-- Runtime: AWS ECS / Kubernetes
+## Business positioning
 
-## Commercial packaging
-- Starter: CI and test automation
-- Growth: full CD with security gates
-- Enterprise: policy-as-code and compliance controls
+1. **Starter** - CI standardization and test automation
+2. **Growth** - CI + security scans + deploy guardrails
+3. **Enterprise** - policy controls, compliance mapping, and audit evidence
 
-## Week 1 execution
-- [ ] Create reference application and folder standards
-- [ ] Configure CI checks and coverage gates
-- [ ] Add image scanning and dependency security checks
-- [ ] Prepare Terraform baseline modules
+## Project structure
+
+```text
+app/
+  main.py
+tests/
+  test_api.py
+security/
+  bandit.yaml
+infra/terraform/
+  main.tf
+```
+
+## Local setup
+
+```bash
+cd projects/05-devsecops-production-template
+pip3 install -r requirements.txt
+uvicorn app.main:app --reload --port 8004
+```
+
+## Run tests
+
+```bash
+cd projects/05-devsecops-production-template
+pytest -q
+```
+
+## Docker
+
+```bash
+cd projects/05-devsecops-production-template
+docker compose up --build
+```
+
+## CI and security workflows
+
+- `.github/workflows/project05-ci.yml` - tests + Bandit
+- `.github/workflows/project05-trivy.yml` - Trivy vulnerability scan
