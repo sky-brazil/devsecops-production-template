@@ -8,7 +8,8 @@ from collections.abc import Callable
 from contextlib import asynccontextmanager
 from uuid import uuid4
 
-from fastapi import FastAPI, HTTPException, Request, Response, status
+from fastapi import FastAPI, Request, Response, status
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 RATE_LIMIT_REQUESTS = 40
@@ -67,9 +68,9 @@ async def rate_limit_middleware(request: Request, call_next: Callable) -> Respon
         bucket.popleft()
 
     if len(bucket) >= RATE_LIMIT_REQUESTS:
-        raise HTTPException(
+        return JSONResponse(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-            detail="Rate limit exceeded. Retry later.",
+            content={"detail": "Rate limit exceeded. Retry later."},
         )
 
     bucket.append(now)
